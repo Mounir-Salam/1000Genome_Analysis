@@ -1,0 +1,18 @@
+databases:
+  local_pg:
+    type: "postgres"
+    host: "localhost"
+    port: 5432
+    user: "mounir"
+    database: "genome_localtest"
+  analytics_bq:
+    type: "bigquery"
+    project_id: "de-zoomcamp-484617"
+    # Relative path from project root or absolute path
+    credentials_path: "keys/de-zoomcamp-key.json"
+
+storage:
+  gcs_raw_data:
+    type: "gcs"
+    bucket_name: "de-zoomcamp-484617-1000genome-data" # Default bucket
+    credentials_path: "keys/de-zoomcamp-key.json"

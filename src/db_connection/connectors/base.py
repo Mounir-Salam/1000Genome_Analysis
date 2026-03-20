@@ -1,0 +1,10 @@
+from abc import ABC, abstractmethod
+
+class BaseConnector(ABC):
+    @abstractmethod
+    def connect(self, config: dict):
+        pass
+
+    @abstractmethod
+    def execute_query(self, query: str):
+        pass
