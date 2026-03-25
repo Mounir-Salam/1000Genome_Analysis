@@ -5,13 +5,17 @@ databases:
     port: 5432
     user: "mounir"
     database: "genome_localtest"
+    default_schema: "public"
   analytics_bq:
     type: "bigquery"
     project_id: "de-zoomcamp-484617"
-    # Relative path from project root or absolute path
-    credentials_path: "keys/de-zoomcamp-key.json"
+    default_schema: "genome_analysis"
+    credentials_path: "keys/de-zoomcamp-key.json" # Relative path from project root or absolute path
 
 storage:
+  local_data:
+    type: "local"
+    base_path: "data"
   gcs_raw_data:
     type: "gcs"
     bucket_name: "de-zoomcamp-484617-1000genome-data" # Default bucket

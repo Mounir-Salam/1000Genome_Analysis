@@ -1,5 +1,6 @@
 # src/connectors/storage/gcs.py
 from google.cloud import storage
+from contextlib import contextmanager
 import os
 
 class GCSConnector:
@@ -45,3 +46,26 @@ class GCSConnector:
         
         # We return a list of names (strings) for easy use in ETL scripts
         return [blob.name for blob in blobs]
+    
+    @contextmanager
+    def open_file(self, target_name, mode='rb'):
+        blob = self.get_blob(target_name)
+        if not blob.exists():
+            raise FileNotFoundError(f"GCS Blob not found: {target_name}")
+
+        # blob.open() returns a IO object compatible with standard Python
+        with blob.open(mode) as f:
+            yield f
+    
+    def upload_file(self, local_file_path, target_name):
+        blob = self.get_blob(target_name)
+        blob.upload_from_filename(local_file_path)
+        print(f"✅ Uploaded to GCS: {target_name}")
+    
+    def save_stream(self, stream, target_name, content_type=None):
+        blob = self.get_blob(target_name)
+        # GCS can upload directly from a stream
+        blob.upload_from_file(stream, content_type=content_type, rewind=False)
+
+    def exists(self, target_name):
+        return self.get_blob(target_name).exists()

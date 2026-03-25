@@ -4,12 +4,14 @@ import pathlib
 from .connectors.db.postgres import PostgresConnector
 from .connectors.db.bigquery import BigQueryConnector
 from .connectors.storage.gcs import GCSConnector
+from .connectors.storage.local import LocalFileSystemConnector
 
 class IOBuilder:
     _map = {
         "postgres": PostgresConnector,
         "bigquery": BigQueryConnector,
-        "gcs": GCSConnector
+        "gcs": GCSConnector,
+        "local": LocalFileSystemConnector
     }
     
     _config = None  # We'll store the YAML data here
