@@ -1,0 +1,22 @@
+genomes_transform:
+  target: dev_local  # Default to Postgres for local testing
+  outputs:
+    dev_local:
+      type: postgres
+      host: localhost
+      user: "{{ env_var('POSTGRES_USER') }}"
+      pass: "{{ env_var('POSTGRES_PASSWORD') }}"
+      port: 5432
+      dbname: "{{ env_var('POSTGRES_DB') }}"
+      schema: public
+      threads: 4
+
+    prod_cloud:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('GCP_PROJECT_ID') }}"
+      dataset: genome_analysis
+      threads: 4
+      # Path relative to the dbt_project folder
+      keyfile: "../{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
+      location: EU

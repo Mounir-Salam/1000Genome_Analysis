@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: external_source
+    # We use a variable so this works for both Postgres ('public') and BigQuery ('genome_analysis')
+    schema: "{{ 'public' if target.name == 'dev_local' else 'genome_analysis' }}"
+    tables:
+      - name: sequence_raw
+        description: "Raw genomic sequence index loaded via Spark"
+        columns:
+          - name: fastq_file
+            tests:
+              - unique
+              - not_null
