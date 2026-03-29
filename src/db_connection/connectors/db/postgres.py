@@ -9,7 +9,7 @@ class PostgresConnector(BaseConnector):
         self.config = config
         # We store the engine as the main entry point
         self.engine = self.connect(config)
-        self._ensure_dataset_exists()
+        self._ensure_schema_exists()
 
     def connect(self, config: dict):
         user = os.getenv("POSTGRES_USER") or config.get('user')

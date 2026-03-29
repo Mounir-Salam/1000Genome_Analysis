@@ -69,3 +69,6 @@ class GCSConnector:
 
     def exists(self, target_name):
         return self.get_blob(target_name).exists()
+    
+    def get_abs_path(self, target_name):
+        return f"gs://{self.default_bucket}/{target_name}"

@@ -7,7 +7,7 @@ class LocalFileSystemConnector:
     def __init__(self, config: dict):
         self.config = config
         # 'bucket_name' in GCS becomes a 'base_directory' in local
-        self.base_path = pathlib.Path(config.get("base_path", "data"))
+        self.base_path = pathlib.Path(config.get("base_path", "data")).resolve()
         self.connect()
 
     def connect(self, config=None):
@@ -52,3 +52,6 @@ class LocalFileSystemConnector:
 
     def exists(self, target_name):
         return (self.base_path / target_name).exists()
+    
+    def get_abs_path(self, target_name):
+        return str(self.base_path / target_name)
