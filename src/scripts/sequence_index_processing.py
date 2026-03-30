@@ -1,19 +1,14 @@
-import os
 import traceback
-import pandas as pd
 
-from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
 from pyspark.sql.functions import col, upper, when, first
 from pyspark.sql.window import Window
 
-from src.config import settings
 from src.config.manager import ResourceManager # switchboard
 from src.scripts.load_to_storage import download_file
 from src.utils.spark_utils import get_spark_session
 
 SEQUENCE_INDEX_URL = "https://ftp-trace.ncbi.nih.gov/1000genomes/ftp/sequence.index"
-GCS_CONNECTOR_VERSION = settings.GCS_CONNECTOR_VERSION
 SCHEMA = StructType([
     StructField('FASTQ_FILE', StringType(), True), 
     StructField('MD5', StringType(), True), 
@@ -45,7 +40,6 @@ SCHEMA = StructType([
 
 storage = ResourceManager.get_main_storage()
 database = ResourceManager.get_main_db()
-spark = get_spark_session(storage)
 input_path = storage.get_abs_path("raw/sequence.index")
 
 if storage.exists("raw/sequence.index"):
@@ -54,25 +48,30 @@ else:
     print(f"Sequence index missing, downloading to {input_path}")
     download_file("raw/sequence.index", SEQUENCE_INDEX_URL)
     
-sequence = spark.read \
-    .option("header", "true") \
-    .schema(SCHEMA) \
-    .csv(input_path, sep="\t")
+if database.exists("sequence_raw"):
+    print("Sequence index already loaded in database, skipping processing...")
+else:
+    print("Processing sequence index and loading to database...")
+    spark = get_spark_session(storage)
+    sequence = spark.read \
+        .option("header", "true") \
+        .schema(SCHEMA) \
+        .csv(input_path, sep="\t")
     
-# set columns to lower case
-sequence = sequence.select([col(c).alias(c.lower()) for c in sequence.columns])
+    # set columns to lower case
+    sequence = sequence.select([col(c).alias(c.lower()) for c in sequence.columns])
 
-window_spec = Window.partitionBy("submission_id") \
-    .orderBy("submission_id") \
-    .rowsBetween(Window.unboundedPreceding, Window.unboundedFollowing)
+    window_spec = Window.partitionBy("submission_id") \
+        .orderBy("submission_id") \
+        .rowsBetween(Window.unboundedPreceding, Window.unboundedFollowing)
 
-# Set missing md5 to null (currently looking like this .........................)
-sequence = sequence \
-    .withColumn("md5", when(col("md5").rlike(r"^\.+$"), None) .otherwise(col("md5"))) \
-    .withColumn("center_name", upper(col("center_name"))) \
-    .withColumn("submission_date", first("submission_date", ignorenulls=True).over(window_spec))
+    # Set missing md5 to null (currently looking like this .........................)
+    sequence = sequence \
+        .withColumn("md5", when(col("md5").rlike(r"^\.+$"), None) .otherwise(col("md5"))) \
+        .withColumn("center_name", upper(col("center_name"))) \
+        .withColumn("submission_date", first("submission_date", ignorenulls=True).over(window_spec))
 
-sequence_df = sequence.toPandas()
-database.load_data(sequence_df, "sequence_raw")
+    sequence_df = sequence.toPandas()
+    database.load_data(sequence_df, "sequence_raw")
 
-spark.stop()
+    spark.stop()

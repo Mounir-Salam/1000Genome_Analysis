@@ -69,3 +69,12 @@ class BigQueryConnector(BaseConnector):
         job = self.client.load_table_from_dataframe(df, table_id, job_config=job_config)
         job.result() # Wait for the load to finish
         print(f"✅ Loaded {len(df)} rows to BigQuery table: {table_id}")
+    
+    def exists(self, table_name: str, schema: str = None):
+        dataset_id = schema or self.config.get("default_schema")
+        table_id = f"{self.client.project}.{dataset_id}.{table_name}"
+        try:
+            self.client.get_table(table_id)
+            return True
+        except NotFound:
+            return False

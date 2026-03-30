@@ -1,5 +1,4 @@
-from sqlalchemy import create_engine
-from sqlalchemy import schema
+from sqlalchemy import create_engine, inspect, schema
 import pandas as pd
 from ..base import BaseConnector
 import os
@@ -54,3 +53,11 @@ class PostgresConnector(BaseConnector):
             index=False
         )
         print(f"✅ Loaded {len(df)} rows to Postgres table: {table_name}")
+    
+    def exists(self, table_name: str, schema: str = None):
+        """Checks if a table exists in the database."""
+        # Priority: 1. Function argument, 2. YAML config, 3. Hardcoded default
+        target_schema = schema or self.config.get("default_schema", "public")
+
+        inspector = inspect(self.engine)
+        return inspector.has_table(table_name, schema=target_schema)
