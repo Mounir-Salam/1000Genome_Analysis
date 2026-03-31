@@ -6,9 +6,16 @@ sources:
     schema: "{{ 'public' if target.name == 'dev_local' else 'genome_analysis' }}"
     tables:
       - name: sequence_raw
-        description: "Raw genomic sequence index loaded via Spark"
+        description: "Raw genomic sequence index"
         columns:
           - name: fastq_file
+            tests:
+              - unique
+              - not_null
+      - name: population_raw
+        description: "Raw population index"
+        columns:
+          - name: population_code
             tests:
               - unique
               - not_null
