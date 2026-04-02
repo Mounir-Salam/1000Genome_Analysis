@@ -19,4 +19,4 @@ genomes_transform:
       threads: 4
       # Path relative to the dbt_project folder
       keyfile: "../{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
-      location: EU
+      location: europe-north2
