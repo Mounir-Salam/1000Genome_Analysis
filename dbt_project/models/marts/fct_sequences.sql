@@ -23,7 +23,8 @@ final as (
         paired_fastq,
 
         insert_size,
-        withdrawn,
+        -- convert to boolean (currently 0/1)
+        case when withdrawn = 1 then true else false end as withdrawn,
         withdrawn_date,
         comment,
         read_count,

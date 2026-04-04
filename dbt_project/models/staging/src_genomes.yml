@@ -12,6 +12,11 @@ sources:
             tests:
               - unique
               - not_null
+          - name: library_layout
+            # Can only be 'SINGLE' or 'PAIRED'
+            tests:
+              - accepted_values:
+                  values: ['SINGLE', 'PAIRED']
       - name: population_raw
         description: "Raw population index"
         columns:
