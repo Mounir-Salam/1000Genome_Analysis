@@ -17,3 +17,6 @@ data/
 
 # SECRETS
 keys/
+
+# dagster
+.dagster/

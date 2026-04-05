@@ -17,6 +17,9 @@ sources:
             tests:
               - accepted_values:
                   values: ['SINGLE', 'PAIRED']
+        meta:
+          dagster:
+            asset_key: ["sequence_index"]
       - name: population_raw
         description: "Raw population index"
         columns:
@@ -24,3 +27,6 @@ sources:
             tests:
               - unique
               - not_null
+        meta:
+          dagster:
+            asset_key: ["population_index"]
