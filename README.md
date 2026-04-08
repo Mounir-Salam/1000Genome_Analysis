@@ -1,6 +1,6 @@
-# End-to-End Pipeline for Processing and Analyzing Data of the 1000 Genomes Project
+# 1000 Genomes Project Index Data ETL Pipeline
 
-> This is a pipeline designed to ingest and process index data created by the 1000 Genomes Project.
+> This is an end-to-end pipeline designed to ingest and process index data created by the 1000 Genomes Project.
 
 ## About the 1000 Genomes Project
 
