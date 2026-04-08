@@ -1,0 +1,7 @@
+.venv
+dbt_project/dbt_venv
+.dagster
+.env
+__pycache__
+*.pyc
+.git

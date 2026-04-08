@@ -5,13 +5,18 @@ databases:
     port: 5432
     user: "username"
     database: "example_database"
+    default_schema: "public"
   analytics_bq:
     type: "bigquery"
     project_id: "example_project"
+    default_schema: "genome_analysis"
     # Relative path from project root or absolute path
     credentials_path: "path/to/key.json"
 
 storage:
+  local_data:
+    type: "local"
+    base_path: "data"
   gcs_raw_data:
     type: "gcs"
     bucket_name: "unique_bucket_name" # Default bucket
