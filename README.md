@@ -80,3 +80,6 @@ You can also launch the Dagster UI at the default port `localhost:3000` and star
 ```bash
 uv run dagster dev -m orchestration
 ```
+
+
+> **Note**: This project can be easily migrated to GCP using Cloud Run service, but I suggest keeping the service account key in google's secret manager for security.

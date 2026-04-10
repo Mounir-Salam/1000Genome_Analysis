@@ -35,4 +35,4 @@ ENV DAGSTER_HOME=/app/.dagster
 RUN mkdir -p .dagster
 
 # 9. Launch Dagster
-CMD [".venv/bin/dagster", "dev", "-h", "0.0.0.0", "-m", "orchestration"]
+CMD ["/app/.venv/bin/dagster", "dev", "-h", "0.0.0.0", "-m", "orchestration"]
