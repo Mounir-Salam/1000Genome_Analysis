@@ -2,6 +2,8 @@
 
 > This is an end-to-end pipeline designed to ingest and process index data created by the 1000 Genomes Project.
 
+![alt text](media/Flowchart.png)
+
 ## About the 1000 Genomes Project
 
 From January 2008 till 2015, an internationl research effort began to create the most detailed catalogue of human genetic variaton. The data is now publicly available, and is used to understand the diversity of the human genome. The project contains index data files that give more details on the projects file structure, as well as data on contributors to the project and the populations that have been sequenced.
